@@ -1,5 +1,6 @@
 # Ex.05 Design a Website for Server Side Processing
-## Date:
+## Date:12-12-2025
+## Ref No:25012420
 
 ## AIM:
  To design a website to calculate the power of a lamp filament in an incandescent bulb in the server side. 
@@ -32,12 +33,132 @@ Create a HTML file to implement form based input and output.
 Publish the website in the given URL.
 
 ## PROGRAM :
+~~~
+math.html
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Power of a Lamp</title>
+<style>
+    body {
+        background-color: powderblue;
+        font-family: Arial;
+    }
+    .box {
+        width: 380px;
+        background-color: plum;
+        color: black;
+        padding: 20px;
+        margin: auto;
+        margin-top: 120px;
+        border: 5px dotted black;
+        text-align: left;
+    }
+    input {
+        width: 150px;
+        padding: 5px;
+    }
+    button {
+        margin-top: 10px;
+        padding: 5px 15px;
+    }
+</style>
+</head>
+<body>
+
+<div class="box">
+    <h2 style="text-align:center;">Power of a Lamp</h2>
+
+    Current : 
+    <input type="text" id="i"> (in A)
+    <br><br>
+
+    Resistance : 
+    <input type="text" id="r"> (in Ω)
+    <br><br>
+
+    <button onclick="calc()">Calculate</button>
+    <br><br>
+
+    Power : 
+    <input type="text" id="p" readonly> W
+</div>
+
+<script>
+function calc() {
+    let I = parseFloat(document.getElementById("i").value);
+    let R = parseFloat(document.getElementById("r").value);
+    
+    if (!isNaN(I) && !isNaN(R)) {
+        document.getElementById("p").value = (I * I * R).toFixed(0);
+    } else {
+        document.getElementById("p").value = "Error";
+    }
+}
+</script>
+
+</body>
+</html>
+
+
+views.py
+
+from django.shortcuts import render
+
+def lamp_power(request):
+    print("Request :", request)
+    context = {}
+    context['power'] = "0"
+    context['I'] = "0"
+    context['R'] = "0"
+
+    if request.method == "POST":
+        print("POST method is used")
+
+        I = request.POST.get('current', '0')
+        R = request.POST.get('resistance', '0')
+
+        print("Current :", I)
+        print("Resistance :", R)
+
+        try:
+            power = (float(I) * float(I)) * float(R)
+        except:
+            power = "Invalid"
+
+        context['power'] = power
+        context['I'] = I
+        context['R'] = R
+
+        print("Power :", power)
+
+    return render(request, 'mathapp/math.html', context)
+
+
+urls.py
+
+from django.contrib import admin
+from django.urls import path
+from mathapp import views   
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+
+    path('lamp-power/', views.lamp_power, name='lamp_power'),
+
+    path('', views.lamp_power, name='lamp_power_root'),
+]
+~~~
 
 
 ## SERVER SIDE PROCESSING:
+<img width="1919" height="1079" alt="Screenshot 2025-12-12 104326" src="https://github.com/user-attachments/assets/c94cc3c9-53fc-4ce4-8432-567b3e461740" />
 
 
 ## HOMEPAGE:
+
+![output ex4](https://github.com/user-attachments/assets/ce0dae20-3af6-4ce1-8206-17adcef3f58b)
 
 
 ## RESULT:
